@@ -1,44 +1,9 @@
+import argparse
 import re
+from argparse import Namespace
 from datetime import datetime
 
-import argparse
-from argparse import Namespace
-
-
-def calculate_three_cycles(days_since_birth: int):
-    """
-    Calculate the position in the three cycles based on the days since birth:
-
-    - physical has a cycle of 23 days
-    - emotional has a cycle of 28 days
-    - mental has a cycle of 33 days
-
-    :param days_since_birth:
-    :return: positions for the three cycles
-    """
-    physical_current_pos = days_since_birth % 23
-    emotional_current_pos = days_since_birth % 28
-    mental_current_pos = days_since_birth % 33
-    return physical_current_pos, emotional_current_pos, mental_current_pos
-
-
-def calculate_biorhythm_position(birth_date: datetime, other_date: datetime):
-    """
-    Calculates the time delta of birth_date and other_date and feeds that to the calculation for the three
-    cycles.
-    Prints out the timedelta and positions based on time delta
-
-    :param birth_date: Date of birth
-    :param other_date: Date to check cycles for
-    """
-    time_delta_days = (other_date - birth_date).days
-    print(f'{time_delta_days} days between birth date and specified date')
-
-    # TODO: calculate for timeframe to get direction of cycle
-    physical_current_pos, emotional_current_pos, mental_current_pos = calculate_three_cycles(time_delta_days)
-    print(f'Physical currently at: {physical_current_pos}')
-    print(f'Emotional currently at: {emotional_current_pos}')
-    print(f'Physical currently at: {mental_current_pos}')
+from biorhytms_calculation import calculate_biorhythm_position
 
 
 def parse_date(date_string: str):
@@ -80,7 +45,13 @@ def process_input(args: Namespace) -> (datetime, datetime):
 def run(args: Namespace):
     birth_date, other_date = process_input(args)
     if birth_date and other_date:
-        calculate_biorhythm_position(birth_date, other_date)
+        time_delta_days = (other_date - birth_date).days
+        print(f'{time_delta_days} days between birth date and specified date')
+        physical_current_pos, emotional_current_pos, mental_current_pos = \
+            calculate_biorhythm_position(birth_date, other_date)
+        print(f'Physical currently at: {physical_current_pos}')
+        print(f'Emotional currently at: {emotional_current_pos}')
+        print(f'Physical currently at: {mental_current_pos}')
 
 
 if __name__ == '__main__':
